@@ -13,6 +13,7 @@ router.use(bodyParser.json());
 // use postman for api testing / making calls
 ///get all users
 // http://localhost:5000/api/auth/users (because the route defined is /api/auth in app.js)
+// https://loginappapi.herokuapp.com/api/auth/users
 router.get('/users',(req,res) => {
     User.find({},(err,data) => {
         if(err) throw err;
@@ -39,6 +40,8 @@ router.get('/users',(req,res) => {
 //     "address":"xyz location",
 //     "role":"user"
 // }
+// http://localhost:5000/api/auth/register
+// https://loginappapi.herokuapp.com/api/auth/register
 router.post('/register',(req,res) => {
     User.findOne({email:req.body.email}, (err,user) => {
         if(!user)  {        // if user does not exists, only then register
@@ -69,6 +72,8 @@ router.post('/register',(req,res) => {
  * use it by providing that as a header with key x-acess-token and value as the given token
  * to get user info using the api/auth/userInfo route
  */
+// http://localhost:5000/api/auth/login
+// https://loginappapi.herokuapp.com/api/auth/login
 router.post('/login',(req,res) => {
     User.findOne({email:req.body.email},(err,user) => {
         if(err) return res.send({auth:false,token:'Error While Login'})
@@ -87,6 +92,8 @@ router.post('/login',(req,res) => {
 // token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYyOWNiYWFjNGY5ZWZiMDk2MWVjMDdhNiIsImlhdCI6MTY1NDQzODc0OSwiZXhwIjoxNjU0NTI1MTQ5fQ.3Wc1FgfUTToV1GdWSLzUNYr75Ut6S4Cka7BDbtYrLnk
 // set x-access-token and give the token returned by api/auth/login route and then get api/auth/userInfo
 //userinfo
+// http://localhost:5000/api/auth/userInfo
+// https://loginappapi.herokuapp.com/api/auth/userInfo (use postman to pass x-access-token as browser cannot pass it)
 router.get('/userInfo',(req,res) => {
     let token = req.headers['x-access-token'];
     if(!token) res.send({auth:false,token:'No Token Provided'})
